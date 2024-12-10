@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Snippets</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .snippet {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>My Snippets</h1>
+    {% for snippet in snippets %}
+        <div class="snippet">
+            <h3>{{ snippet.title }}</h3>
+            <p>{{ snippet.description }}</p>
+            <pre>{{ snippet.code }}</pre>
+            <p><strong>Language:</strong> {{ snippet.language }}</p>
+            <p><strong>Tags:</strong> {{ snippet.tags }}</p>
+            <p><em>Visibility: {{ snippet.visibility }}</em></p>
+        </div>
+    {% empty %}
+        <p>You have no snippets yet.</p>
+    {% endfor %}
+</body>
+</html>
