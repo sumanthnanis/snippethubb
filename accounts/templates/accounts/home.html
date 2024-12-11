@@ -297,6 +297,178 @@
             background: rgba(0, 0, 0, 0.5);
             z-index: 998;
         }
+        
+.tooltip {
+    position: fixed;
+    background: white;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    display: none;
+    align-items: center;
+    gap: 0.75rem;
+    z-index: 9999;
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.tooltip span {
+    color: #1e293b;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.tooltip button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.tooltip button:hover {
+    background: #1d4ed8;
+}
+
+.chatbot-icon {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: #2563eb;
+    color: white;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+    transition: background-color 0.2s;
+}
+
+.chatbot-icon:hover {
+    background: #1d4ed8;
+}
+
+.chat-window {
+    position: fixed;
+    bottom: 5rem;
+    right: 1.5rem;
+    width: 380px;
+    height: 500px;
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    display: none;
+    flex-direction: column;
+    z-index: 9999;
+    overflow: hidden;
+}
+
+.chat-header {
+    background: #2563eb;
+    color: white;
+    padding: 1rem 1.25rem;
+    font-weight: 600;
+    font-size: 0.975rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-close {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1.25rem;
+    padding: 0.25rem;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.message {
+    max-width: 80%;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.4;
+}
+
+.message.user {
+    background: #2563eb;
+    color: white;
+    margin-left: auto;
+    border-bottom-right-radius: 0.25rem;
+}
+
+.message.ai {
+    background: #f1f5f9;
+    color: #1e293b;
+    margin-right: auto;
+    border-bottom-left-radius: 0.25rem;
+}
+
+.chat-input {
+    padding: 1rem;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.chat-input textarea {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    resize: none;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    height: 45px;
+    max-height: 45px;
+}
+
+.chat-input textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+.chat-input button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: background-color 0.2s;
+}
+
+.chat-input button:hover {
+    background: #1d4ed8;
+}
+
+
 
         /* Responsive Design */
         @media (max-width: 1024px) {
@@ -442,6 +614,30 @@
                 <p>No snippets available.</p>
             {% endfor %}
         </div>
+        <!-- Tooltip -->
+        <div id="tooltip" class="tooltip">
+            <span>💡 Want clarity about this code?</span>
+            <button id="ask-ai-button">Ask AI</button>
+        </div>
+        
+        <div id="chatbot-icon" class="chatbot-icon">💬</div>
+        
+        <div id="chat-window" class="chat-window">
+            <div class="chat-header">
+                AI Assistant
+                <button class="chat-close" id="chat-close">×</button>
+            </div>
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="chat-input">
+                <textarea 
+                    id="chat-input" 
+                    placeholder="Type your message here..."
+                    rows="1"
+                ></textarea>
+                <button id="send-message">Send</button>
+            </div>
+        </div>
+
     </main>
 
     <script>
@@ -498,7 +694,96 @@
         window.location.href = url.toString();
     }
 
+
     </script>
+<script>
+   const tooltip = document.getElementById("tooltip");
+const chatbotIcon = document.getElementById("chatbot-icon");
+const chatWindow = document.getElementById("chat-window");
+const chatMessages = document.getElementById("chat-messages");
+const sendMessageButton = document.getElementById("send-message");
+const chatInput = document.getElementById("chat-input");
+const chatClose = document.getElementById("chat-close");
+
+let selectedText = "";
+
+// Show tooltip when text is selected
+document.addEventListener("mouseup", (e) => {
+    const selection = window.getSelection();
+    selectedText = selection.toString().trim();
+
+    if (selectedText) {
+        const range = selection.getRangeAt(0);
+        const rect = range.getBoundingClientRect();
+        tooltip.style.left = `${rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2)}px`;
+        tooltip.style.top = `${rect.top - tooltip.offsetHeight - 10 + window.scrollY}px`;
+        tooltip.style.display = "flex";
+    } else {
+        tooltip.style.display = "none";
+    }
+});
+
+// Hide tooltip on click outside
+document.addEventListener("mousedown", (e) => {
+    if (!tooltip.contains(e.target)) {
+        tooltip.style.display = "none";
+    }
+});
+
+// Toggle chat window
+chatbotIcon.addEventListener("click", () => {
+    chatWindow.style.display = chatWindow.style.display === "flex" ? "none" : "flex";
+});
+
+// Close chat window
+chatClose.addEventListener("click", () => {
+    chatWindow.style.display = "none";
+});
+
+// Add message to chat
+function addMessage(message, isUser = false) {
+    const messageDiv = document.createElement("div");
+    messageDiv.className = `message ${isUser ? 'user' : 'ai'}`;
+    messageDiv.textContent = message;
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Handle send message
+function sendMessage() {
+    const message = chatInput.value.trim();
+    if (message) {
+        addMessage(message, true);
+        chatInput.value = "";
+        
+        // Simulate AI response
+        setTimeout(() => {
+            addMessage("I understand you're asking about this code. How can I help explain it?");
+        }, 1000);
+    }
+}
+
+// Send message button click
+sendMessageButton.addEventListener("click", sendMessage);
+
+// Send message on Enter (but Shift+Enter for new line)
+chatInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+    }
+});
+
+// Ask AI button click
+document.getElementById("ask-ai-button").addEventListener("click", () => {
+    tooltip.style.display = "none";
+    chatWindow.style.display = "flex";
+    chatInput.value = `Can you explain this code: ${selectedText}`;
+    chatInput.focus();
+});
+</script>
+
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
