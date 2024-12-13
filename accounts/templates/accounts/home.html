@@ -715,8 +715,8 @@ document.addEventListener("mouseup", (e) => {
     if (selectedText) {
         const range = selection.getRangeAt(0);
         const rect = range.getBoundingClientRect();
-        tooltip.style.left = `${rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2)}px`;
-        tooltip.style.top = `${rect.top - tooltip.offsetHeight - 10 + window.scrollY}px`;
+        tooltip.style.left = (rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2)) + 'px';
+        tooltip.style.top = (rect.top - tooltip.offsetHeight - 10 + window.scrollY) + 'px';
         tooltip.style.display = "flex";
     } else {
         tooltip.style.display = "none";
@@ -743,7 +743,7 @@ chatClose.addEventListener("click", () => {
 // Add message to chat
 function addMessage(message, isUser = false) {
     const messageDiv = document.createElement("div");
-    messageDiv.className = `message ${isUser ? 'user' : 'ai'}`;
+    messageDiv.className = message + (isUser ? ' user' : ' ai');
     messageDiv.textContent = message;
     chatMessages.appendChild(messageDiv);
     chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -751,17 +751,34 @@ function addMessage(message, isUser = false) {
 
 // Handle send message
 function sendMessage() {
-    const message = chatInput.value.trim();
-    if (message) {
-        addMessage(message, true);
-        chatInput.value = "";
-        
-        // Simulate AI response
-        setTimeout(() => {
-            addMessage("I understand you're asking about this code. How can I help explain it?");
-        }, 1000);
+        const message = chatInput.value.trim();
+        if (message) {
+            addMessage(message, true);
+            chatInput.value = "";
+
+            // Send AJAX request to ai_view endpoint
+            fetch('/ai_view/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ message: message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.response) {
+                    addMessage(data.response);
+                } else {
+                    addMessage("Sorry, something went wrong.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                addMessage("Sorry, something went wrong.");
+            });
+        }
     }
-}
 
 // Send message button click
 sendMessageButton.addEventListener("click", sendMessage);
