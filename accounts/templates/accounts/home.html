@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>CodeShare Hub</title>
+    <title>SnippetHub</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
     <style>
@@ -641,7 +641,7 @@
     </main>
 
     <script>
-        // Hamburger Menu Functionality
+        // Hamburger Menu 
         const hamburgerMenu = document.querySelector('.hamburger-menu');
         const sidebar = document.querySelector('.sidebar');
         const backdrop = document.querySelector('.backdrop');
@@ -665,7 +665,7 @@
             });
         });
 
-        // Copy to Clipboard Functionality
+        // Copy to Clipboard 
         document.querySelectorAll('.copy-btn').forEach(button => {
             button.addEventListener('click', () => {
                 const codeBlock = button.closest('.snippet-content').querySelector('code');
@@ -684,7 +684,7 @@
         const selectedLanguage = document.getElementById("language-dropdown").value;
         const url = new URL(window.location.href);
 
-        // Update or remove the language parameter
+        
         if (selectedLanguage) {
             url.searchParams.set("language", selectedLanguage);
         } else {
@@ -806,6 +806,7 @@ document.getElementById("ask-ai-button").addEventListener("click", () => {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
 </body>
 

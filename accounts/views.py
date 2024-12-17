@@ -69,7 +69,7 @@ def home(request):
 
     # Handle recent snippets
     if recent:
-        snippets = snippets.order_by('-created_at')[:10]  # Fetch the 10 most recent snippets
+        snippets = snippets.order_by('-created_at')[:10] 
 
     # Handle my snippets (if user is logged in)
     if my_snippets and request.user.is_authenticated:
