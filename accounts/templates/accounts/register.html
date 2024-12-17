@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Register</title>
+    <title>Register - SnippetHub</title>
     <style>
         * {
             margin: 0;
@@ -11,31 +11,97 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #fafafa;
             margin: 0;
             padding: 0;
+            height: 100vh;
+            color: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            color: #111;
+            background: #0f172a;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .background-code {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .code-column {
+            flex: 1;
+            padding: 20px;
+            font-family: 'Consolas', monospace;
+            color: rgba(148, 163, 184, 0.35);
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre;
+            overflow: hidden;
+        }
+
+        .code-scroll {
+            animation: scroll 30s linear infinite;
+            transform-origin: top;
+        }
+
+        .code-scroll-reverse {
+            animation: scroll-reverse 35s linear infinite;
+            transform-origin: bottom;
+        }
+
+        .code-scroll-middle {
+            animation: scroll 40s linear infinite;
+            transform-origin: center;
+        }
+
+        @keyframes scroll {
+            from {
+                transform: translateY(0);
+            }
+            to {
+                transform: translateY(-50%);
+            }
+        }
+
+        @keyframes scroll-reverse {
+            from {
+                transform: translateY(-50%);
+            }
+            to {
+                transform: translateY(0);
+            }
         }
 
         .container {
-            background-color: white;
+            background: rgba(255, 255, 255, 0.04);
             padding: 3rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-            width: 400px;
-            text-align: left;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            width: 450px;
+            z-index: 1;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .container h1 {
-            margin-bottom: 1.5rem;
-            color: #000;
+            margin-bottom: 0.5rem;
+            color: #fff;
             font-size: 1.75rem;
             font-weight: 600;
-            letter-spacing: -0.025em;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
         }
 
         .container form {
@@ -49,48 +115,54 @@
         }
 
         .input-group label {
-            display: block;
-            margin-bottom: 0.5rem;
             font-size: 0.875rem;
-            font-weight: 500;
-            color: #333;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 0.5rem;
+            display: block;
         }
 
         .input-group input {
             width: 100%;
             padding: 0.875rem;
-            border: 1.5px solid #e0e0e0;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             font-size: 0.95rem;
-            transition: all 0.2s ease;
-            background: white;
+            color: #fff;
+            transition: all 0.2s;
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
         }
 
         .input-group input:focus {
             outline: none;
-            border-color: #000;
-            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.08);
         }
 
-        .input-group input::placeholder {
-            color: #9e9e9e;
+        .password-requirements {
+            margin-top: 0.25rem;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.5);
         }
 
         button {
             padding: 0.875rem;
-            background-color: #000;
+            background: #3b82f6;
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-size: 0.95rem;
             font-weight: 500;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
             margin-top: 0.5rem;
         }
 
         button:hover {
-            background-color: #222;
+            background: #2563eb;
             transform: translateY(-1px);
         }
 
@@ -98,24 +170,39 @@
             transform: translateY(0);
         }
 
-        .register-link {
+        .login-link {
             margin-top: 1.5rem;
             display: block;
-            color: #333;
+            color: rgba(255, 255, 255, 0.6);
             text-decoration: none;
             font-size: 0.875rem;
             text-align: center;
-            transition: color 0.2s ease;
+            transition: color 0.2s;
         }
 
-        .register-link:hover {
-            color: #000;
-            text-decoration: underline;
+        .login-link:hover {
+            color: #fff;
+        }
+
+        .brand {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            z-index: 2;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { 
+                opacity: 0; 
+                transform: translateY(10px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
         }
 
         .container {
@@ -124,13 +211,114 @@
     </style>
 </head>
 <body>
+    <div class="brand">SnippetHub</div>
+    <div class="background-code">
+        <div class="code-column">
+            <div class="code-scroll">
+// Error Handling Utilities
+class CustomError extends Error {
+    constructor(message, code) {
+        super(message);
+        this.name = 'CustomError';
+        this.code = code;
+    }
+}
+
+function handleApiError(error) {
+    if (error.response) {
+        console.error(
+            `Status: ${error.response.status}`,
+            `Data: ${error.response.data}`
+        );
+    } else if (error.request) {
+        console.error('No response received');
+    } else {
+        console.error('Error:', error.message);
+    }
+    throw new CustomError(
+        error.message, 
+        error.response?.status
+    );
+}
+            </div>
+        </div>
+        <div class="code-column">
+            <div class="code-scroll-middle">
+// Form Validation Helper
+const validator = {
+    email: (value) => {
+        const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return {
+            isValid: pattern.test(value),
+            message: pattern.test(value) 
+                ? '' 
+                : 'Invalid email format'
+        };
+    },
+    password: (value) => {
+        const hasLength = value.length >= 8;
+        const hasUpper = /[A-Z]/.test(value);
+        const hasLower = /[a-z]/.test(value);
+        const hasNumber = /\d/.test(value);
+        
+        const isValid = hasLength && 
+            hasUpper && hasLower && 
+            hasNumber;
+            
+        return {
+            isValid,
+            message: isValid 
+                ? '' 
+                : 'Password requirements not met'
+        };
+    }
+};
+            </div>
+        </div>
+        <div class="code-column">
+            <div class="code-scroll-reverse">
+// User Authentication Helper
+class Auth {
+    constructor() {
+        this.token = null;
+        this.user = null;
+    }
+
+    async login(credentials) {
+        try {
+            const response = await fetch(
+                '/api/login', 
+                {
+                    method: 'POST',
+                    body: JSON.stringify(credentials)
+                }
+            );
+            const data = await response.json();
+            this.token = data.token;
+            this.user = data.user;
+            return data;
+        } catch (error) {
+            handleApiError(error);
+        }
+    }
+
+    logout() {
+        this.token = null;
+        this.user = null;
+    }
+}
+            </div>
+        </div>
+    </div>
+
     <div class="container">
-        <h1>Create your account</h1>
+        <h1>Join SnippetHub</h1>
+        <p class="subtitle">Create your account to store and manage code snippets</p>
         <form method="post">
             {% csrf_token %}
             <div class="input-group">
                 <label for="username">Username</label>
-                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                <input type="text" id="username" name="username" placeholder="Choose a username" required>
             </div>
             <div class="input-group">
                 <label for="email">Email</label>
@@ -138,15 +326,18 @@
             </div>
             <div class="input-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                <input type="password" id="password" name="password" placeholder="Create a password" required>
+                <div class="password-requirements">
+                    Must be at least 8 characters with uppercase, lowercase & numbers
+                </div>
             </div>
             <div class="input-group">
                 <label for="confirm_password">Confirm Password</label>
                 <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
             </div>
-            <button type="submit">Create account</button>
+            <button type="submit">Create Account</button>
         </form>
-        <a href="/login/" class="register-link">Already have an account? Sign in</a>
+        <a href="/login/" class="login-link">Already have an account? Sign in</a>
     </div>
 </body>
 </html>

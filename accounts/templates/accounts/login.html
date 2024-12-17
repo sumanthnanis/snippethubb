@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login</title>
+    <title>Login - SnippetHub</title>
     <style>
         * {
             margin: 0;
@@ -11,31 +11,97 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #fafafa;
             margin: 0;
             padding: 0;
+            height: 100vh;
+            color: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            color: #111;
+            background: #0f172a;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .background-code {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .code-column {
+            flex: 1;
+            padding: 20px;
+            font-family: 'Consolas', monospace;
+            color: rgba(148, 163, 184, 0.35);
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre;
+            overflow: hidden;
+        }
+
+        .code-scroll {
+            animation: scroll 30s linear infinite;
+            transform-origin: top;
+        }
+
+        .code-scroll-reverse {
+            animation: scroll-reverse 35s linear infinite;
+            transform-origin: bottom;
+        }
+
+        .code-scroll-middle {
+            animation: scroll 40s linear infinite;
+            transform-origin: center;
+        }
+
+        @keyframes scroll {
+            from {
+                transform: translateY(0);
+            }
+            to {
+                transform: translateY(-50%);
+            }
+        }
+
+        @keyframes scroll-reverse {
+            from {
+                transform: translateY(-50%);
+            }
+            to {
+                transform: translateY(0);
+            }
         }
 
         .container {
-            background-color: white;
+            background: rgba(255, 255, 255, 0.04);
             padding: 3rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             width: 400px;
-            text-align: left;
+            z-index: 1;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .container h1 {
-            margin-bottom: 1.5rem;
-            color: #000;
+            margin-bottom: 0.5rem;
+            color: #fff;
             font-size: 1.75rem;
             font-weight: 600;
-            letter-spacing: -0.025em;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
         }
 
         .container form {
@@ -49,48 +115,48 @@
         }
 
         .input-group label {
-            display: block;
-            margin-bottom: 0.5rem;
             font-size: 0.875rem;
-            font-weight: 500;
-            color: #333;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 0.5rem;
+            display: block;
         }
 
         .input-group input {
             width: 100%;
             padding: 0.875rem;
-            border: 1.5px solid #e0e0e0;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             font-size: 0.95rem;
-            transition: all 0.2s ease;
-            background: white;
+            color: #fff;
+            transition: all 0.2s;
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
         }
 
         .input-group input:focus {
             outline: none;
-            border-color: #000;
-            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
-        }
-
-        .input-group input::placeholder {
-            color: #9e9e9e;
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.08);
         }
 
         button {
             padding: 0.875rem;
-            background-color: #000;
+            background: #3b82f6;
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-size: 0.95rem;
             font-weight: 500;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
             margin-top: 0.5rem;
         }
 
         button:hover {
-            background-color: #222;
+            background: #2563eb;
             transform: translateY(-1px);
         }
 
@@ -101,31 +167,159 @@
         .register-link {
             margin-top: 1.5rem;
             display: block;
-            color: #333;
+            color: rgba(255, 255, 255, 0.6);
             text-decoration: none;
             font-size: 0.875rem;
             text-align: center;
-            transition: color 0.2s ease;
+            transition: color 0.2s;
         }
 
         .register-link:hover {
-            color: #000;
-            text-decoration: underline;
+            color: #fff;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .container {
-            animation: fadeIn 0.4s ease-out;
+        .brand {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            z-index: 2;
         }
     </style>
 </head>
 <body>
+    <div class="brand">SnippetHub</div>
+    <div class="background-code">
+        <div class="code-column">
+            <div class="code-scroll">
+// Frequently Used Code Snippets
+function validateForm() {
+    const email = document.getElementById('email');
+    if (!email.value.includes('@')) {
+        return false;
+    }
+    return true;
+}
+
+// API Request Template
+async function fetchData(url) {
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+// Date Formatter
+function formatDate(date) {
+    const options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    };
+    return new Date(date)
+        .toLocaleDateString('en-US', options);
+}
+            </div>
+        </div>
+        <div class="code-column">
+            <div class="code-scroll-middle">
+// React Hooks Collection
+function useLocalStorage(key, initialValue) {
+    const [storedValue, setStoredValue] = 
+        useState(() => {
+        try {
+            const item = window.localStorage
+                .getItem(key);
+            return item ? JSON.parse(item) 
+                : initialValue;
+        } catch (error) {
+            return initialValue;
+        }
+    });
+
+    const setValue = value => {
+        try {
+            setStoredValue(value);
+            window.localStorage
+                .setItem(key, 
+                JSON.stringify(value));
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    return [storedValue, setValue];
+}
+
+// Custom Hooks
+function useDebounce(value, delay) {
+    const [debouncedValue, setDebouncedValue] = 
+        useState(value);
+
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedValue(value);
+        }, delay);
+
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [value, delay]);
+
+    return debouncedValue;
+}
+            </div>
+        </div>
+        <div class="code-column">
+            <div class="code-scroll-reverse">
+// Utility Functions Collection
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Color Converter
+function rgbToHex(r, g, b) {
+    return '#' + [r, g, b]
+        .map(x => {
+            const hex = x.toString(16);
+            return hex.length === 1 
+                ? '0' + hex 
+                : hex;
+        })
+        .join('');
+}
+
+// Array Helpers
+const arrayUtils = {
+    shuffle: (array) => {
+        return array
+            .slice()
+            .sort(() => Math.random() - 0.5);
+    },
+    unique: (array) => {
+        return [...new Set(array)];
+    }
+};
+            </div>
+        </div>
+    </div>
+
     <div class="container">
-        <h1>Sign in to your account</h1>
+        <h1>Welcome Back</h1>
+        <p class="subtitle">Access your code snippets library</p>
         <form method="post">
             {% csrf_token %}
             <div class="input-group">
@@ -136,9 +330,9 @@
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" placeholder="Enter your password" required>
             </div>
-            <button type="submit">Sign in</button>
+            <button type="submit">Sign in to SnippetHub</button>
         </form>
-        <a href="/register/" class="register-link">Don't have an account? Create one</a>
+        <a href="/register/" class="register-link">New to SnippetHub? Create an account</a>
     </div>
 </body>
 </html>
