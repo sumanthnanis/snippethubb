@@ -8,4 +8,5 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('add-snippet/', views.add_snippet, name='add_snippet'),
     path('ai_view/', views.ai_view, name='ai_view'),
+    # path('delete-snippet/<int:snippet_id>/', views.delete_snippet, name='delete_snippet'),
 ]
